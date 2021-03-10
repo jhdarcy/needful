@@ -3,8 +3,8 @@ from secrets import token_hex
 from re import compile as compile_regex
 from re import DOTALL
 
-from needful._html_objects.grid_object import GridObject
-from needful._utils import check_type
+from .grid_object import GridObject
+from .._utils import check_type
 
 
 class PlotlyFigure(GridObject):

@@ -2,6 +2,10 @@
 to make the JS development easier. This file is processed and inserted into the final
 HTML output file, and should not be edited lest needful be broken forever. #}
 
+var {{config_var}} = {
+    "pageNumbers" : {{ page_numbers | lower() }}
+}
+
 // Define globals first:
 var slideData = [
 {% for slide in slides %}
@@ -9,7 +13,7 @@ var slideData = [
         "id" : "{{slide.id}}",
         "title" : "{{slide.title}}",
         "theme_id" : {{ "null" if slide.theme == None else '"' + slide.theme.id + '"'}},
-        "html" : `{{slide.html|replace("\\", "\\\\")}}`,
+        "html" : `{{ slide.html | replace("\\", "\\\\") }}`,
         "layout" : "grid-template-columns: repeat({{slide.n_cols}}, 1fr)",
         "plotly" : function plot() {
             {{slide.plotly_func}}
@@ -17,7 +21,8 @@ var slideData = [
         "purge" : function purge() {
             {{slide.purge_func}}
         },
-        "disable_mathjax" : {{slide.disable_mathjax|lower()}}
+        "pageNumber" : {{ config_var + ".pageNumbers" if slide.page_number == None else slide.page_number | lower() }},
+        "disable_mathjax" : {{ slide.disable_mathjax | lower() }}
     } {% if not loop.last %},{% endif %}
 {% endfor %}
 ];
@@ -28,7 +33,7 @@ var maxIndex = slideData.length - 1;
 // Map slide IDs to their position in the slideData array.
 var slideIDToIndex = {};
 for (var i = 0; i <= maxIndex; i++){
-  var slideID = slideData[i]['id'];
+  var slideID = slideData[i].id;
   slideIDToIndex[slideID] = i;
 }
 
@@ -90,7 +95,9 @@ function showSlide(slide) {
     // Update slide number.
     var slideNumber = $("#slide-number");
     slideNumber.empty();
-    slideNumber.append(slideIndex + 1);
+    if (slide.pageNumber){
+        slideNumber.append(slideIndex + 1);
+    }
 
     // Typeset any maths that may be present.
     if (typeof MathJax !== "undefined" & !slide.disable_mathjax) {
@@ -110,8 +117,6 @@ function scaleContent(){
     var windowHeight = $(window).height() - slideContent[0].offsetTop;
     var contentHeight = slideContent[0].scrollHeight
 
-//    console.log("windowHeight: " + windowHeight, "contentHeight: " + contentHeight);
-
     if (contentHeight > windowHeight){
         var scaleY = (windowHeight / contentHeight).toFixed(2);
         var re = new RegExp("; transform: scale\(.*\); transform-origin: 0 0")
@@ -120,7 +125,6 @@ function scaleContent(){
         var scaleTransform = "; transform: scale(1, " + scaleY + "); transform-origin: 0 0"
         style += scaleTransform
         slideContent.attr("style", style);
-//        console.log("scaleY: " + scaleY);
     }
 
 }

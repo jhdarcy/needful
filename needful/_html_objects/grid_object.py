@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from needful._utils import check_sanity_int
+from .._utils import check_sanity_int
 
 
 class GridObject(ABC):

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 
 from jinja2 import Environment, FileSystemLoader
 import webbrowser
@@ -15,13 +15,21 @@ class Presentation:
     ----------
     title : str
         The title of this presentation. This will be displayed in the browser's title/tab bar.
-    css_file : str, optional
+    css_file : str, Path, optional
         The .css file controlling the overall styling of this presentation. If left blank, the presentation will use the
         default needful style.
-    mathjax : bool
+    page_numbers : bool, default=True
+        Whether to display page numbers on each slide. Defaults to `True`, and can be overridden at an individual slide
+        level if needed.
+    mathjax : bool, default=False
         Whether to load MathJax to display equations. Defaults to `False`.
     """
-    def __init__(self, title: str, css_file: Union[str, Path] = "", mathjax: bool = False):
+    def __init__(self,
+                 title: str,
+                 css_file: Optional[Union[str, Path]] = None,
+                 page_numbers: bool = True,
+                 mathjax: bool = False
+                 ):
 
         self.slides = []
 
@@ -36,7 +44,7 @@ class Presentation:
         self._html_template = self._static_dir.joinpath("template.html")
         check_exists(self._html_template, "HTML template")
 
-        check_type("css_file", css_file, Union[str, Path])
+        check_type("css_file", css_file, Optional[Union[str, Path]])
         if not css_file:
             # No CSS file provided - use default.css
             self._css_file = self._static_dir.joinpath("default.css")
@@ -44,6 +52,9 @@ class Presentation:
         else:
             self._css_file = Path(css_file)
             check_exists(self._css_file, css_file)
+
+        check_type("page_numbers", page_numbers, bool)
+        self.page_numbers = page_numbers
 
         check_type("mathjax", mathjax, bool)
         self.mathjax = mathjax
@@ -124,6 +135,8 @@ class Presentation:
             "slides": self.slides,
             "title": self.title,
             "css_themes": self._css_themes,
+            "page_numbers": self.page_numbers,
+            "config_var": "needfulConfig"
         }
         self.html_out = template.render(template_vars)
 

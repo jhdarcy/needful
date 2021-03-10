@@ -4,7 +4,7 @@
 
 
 /* Some convenient global styling variables, modify and add to as necessary. Please note that all variable names need
-to be defined under :root, are preceded by -- amd are case sensitive.*/
+to be defined under :root, are preceded by -- and are case sensitive.*/
 :root{
     --main-background-color: white;
 

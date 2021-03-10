@@ -4,8 +4,8 @@ from base64 import b64encode
 
 from PIL import Image as PILImage
 
-from needful._html_objects import GridObject
-from needful._utils import check_exists, check_type, check_sanity_int
+from .grid_object import GridObject
+from .._utils import check_exists, check_type, check_sanity_int
 
 
 class Image(GridObject):

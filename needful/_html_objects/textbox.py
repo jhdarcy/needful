@@ -1,7 +1,8 @@
 from markdown import Markdown
 
-from needful._html_objects import GridObject
-from needful._utils import check_type
+from .grid_object import GridObject
+from .._utils import check_type
+
 
 class TextBox(GridObject):
     """Represents a textbox on the slide.

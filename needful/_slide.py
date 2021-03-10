@@ -1,14 +1,15 @@
 # Standard module imports
 from typing import Optional, Union
 from pathlib import Path
+from secrets import token_hex
 
 # Third-party module imports
 from plotly.graph_objects import Figure
 
 # From this module
-from needful._css import CSSTheme
-from needful._html_objects import TextBox, Image, PlotlyFigure
-from needful._utils import check_type
+from ._css import CSSTheme
+from ._html_objects import TextBox, Image, PlotlyFigure
+from ._utils import check_type
 
 
 class Slide:
@@ -23,11 +24,14 @@ class Slide:
     theme : needful.CSSTheme, optional
         The CSS theme object to apply to this slide. Defaults to `None`. If `None`, this slide will use the styling
         defined in the CSS file for the whole presentation.
-    disable_mathjax : bool, optional
+    page_number : bool, optional
+        Whether to display the page number on this slide. If specified, this will override the `page_numbers` option
+        set for the overall presentation.
+    disable_mathjax : bool, default=False
         Disables MathJax typesetting on this slide. Defaults to `False`. (Note: this setting only has an effect if
         `mathjax = True` is set for the overall presentation.)
     menu_title : str, optional
-        A version of the title to display in the presentation's hidden navigation menu. Leaving this blank will set the
+        A version of the title to display in the presentation's hidden navigation menu. Leave as `None` to set the
         menu title to `title`.
     id : str, optional
         The ID to give this slide. This is reserved for future functionality.
@@ -64,13 +68,19 @@ class Slide:
             plot_ids = [plot.fig_id for plot in self._plots]
             return "\n".join([f'Plotly.purge("{plot_id}");' for plot_id in plot_ids])
 
-    def __init__(self, title: str, columns: int, theme: Optional[CSSTheme] = None, disable_mathjax: bool = False,
-                 menu_title: str = "", section_header: bool = False, id: str = ""):
+    def __init__(self,
+                 title: str,
+                 columns: int,
+                 theme: Optional[CSSTheme] = None,
+                 page_number: Optional[bool] = None,
+                 disable_mathjax: bool = False,
+                 menu_title: Optional[str] = None,
+                 id: Optional[str] = None
+                 ):
 
         # Assign slide ID, generate one randomly if not specified.
-        check_type("id", id, str)
-        if id.strip() == "":
-            from secrets import token_hex
+        check_type("id", id, Optional[str])
+        if id is None or id.strip() == "":
             self.id = token_hex(5)
         else:
             self.id = id
@@ -87,11 +97,16 @@ class Slide:
         self.theme = theme
         self.theme_id = theme.id if theme is not None else None
 
+        check_type("page_number", page_number, Optional[bool])
+        self.page_number = page_number
+
         check_type("disable_mathjax", disable_mathjax, bool)
         self.disable_mathjax = disable_mathjax
 
         # Set menu title, raise error if both menu_title and title are blank.
-        check_type("menu_title", menu_title, str)
+        check_type("menu_title", menu_title, Optional[str])
+        if menu_title is None:
+            menu_title = ""
         if title.strip() == menu_title.strip() == "":
             raise ValueError("Slide title and menu title are blank. If the title is to be left blank, then menu_title needs to be set.")
         if menu_title.strip() == "":
