@@ -1,0 +1,83 @@
+
+/* Google font import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+
+/* Some convenient global styling variables, modify and add to as necessary. Please note that all variable names need
+to be defined under :root, are preceded by -- amd are case sensitive.*/
+:root{
+    --main-background-color: white;
+
+    --main-font-family: 'Inter', sans-serif;
+    --main-font-color: black;
+
+    --slide-margin-left: 3%;
+    --slide-margin-right: 3%;
+    --slide-margin-top: 1%;
+    --slide-margin-bottom: 2.5%;
+
+    --slide-title-position: left; /* left, center, or right */
+    --slide-number-position: left; /* left, center, or right */
+
+}
+
+
+html, body {
+    background: var(--main-background-color);
+    font-family: var(--main-font-family);
+    font-weight: 300;
+    color: var(--main-font-color);
+}
+
+#slide-title {
+    font-size: 3em;
+    font-weight: 500;
+    text-align: var(--slide-title-position);
+    padding-left: var(--slide-margin-left);
+    padding-right: var(--slide-margin-right);
+    padding-top: var(--slide-margin-top);
+}
+
+#slide-content {
+    font-size: 1.5em;
+}
+
+#slide-number {
+    font-size: 1.7em;
+}
+
+/*** Slide navigation and controls ***/
+
+.slide-control {
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+}
+
+/* Rounded borders for prev/next controls */
+.slide-control.prev {
+    border-radius: 0 4px 4px 0;
+}
+
+.slide-control.next {
+    border-radius: 4px 0 0 4px;
+}
+
+/* Add a bit of hover effect to the slide controls */
+.slide-control.prev:hover, .slide-control.next:hover {
+    background-color: rgba(0,0,0,0.3);
+}
+
+/* The navigation menu that appears when hovering over the page number */
+#nav-menu-content {
+    background-color: var(--main-background-color);
+    border-style: solid;
+    border-width: 1px;
+    border-color: #626262;
+    border-radius: 2px;
+}
+
+#fullscreen-link {
+    font-weight: 500;
+    font-size: 0.9em;
+}
