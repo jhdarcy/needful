@@ -27,8 +27,14 @@ class Image(GridObject):
         The percentage of the original image width to scale by. Defaults to 100 (no resizing).
     """
 
-    def __init__(self, image_path: Union[str, Path], row: int, column: int, row_span: int = 1, col_span: int = 1,
-                 width_pct: int = 100):
+    def __init__(self,
+                 image_path: Union[str, Path],
+                 row: int,
+                 column: int,
+                 row_span: int = 1,
+                 col_span: int = 1,
+                 width_pct: int = 100
+                 ):
 
         # Check provided image_path is either string or Path object, then check that it exists.
         check_type("image_path", image_path, Union[str, Path])
@@ -56,7 +62,7 @@ class Image(GridObject):
         img_width = int(self.width_pct / 100 * img_size[0])
 
         img_style_str = f'style="justify-self:center"'
-        html_str = f'<div {self._style_str}><img src="data:image;base64, {img}" {img_style_str} width={img_width}px></div>'
+        html_str = f'<div {self._style_str}><center><img src="data:image;base64, {img}" {img_style_str} width={img_width}px></center></div>'
         return html_str
 
 

@@ -1,5 +1,9 @@
 {# Contains essential CSS required for proper functioning. Edit at your peril. #}
 
+body {
+    font-size: 100%;
+}
+
 /*\ Slide container and content \*/
 
 #slide-container {

@@ -26,8 +26,15 @@ class TextBox(GridObject):
         relevant when `markdown = False`.
     """
 
-    def __init__(self, content: str, row: int, column: int, row_span: int = 1, col_span: int = 1, markdown: bool = True,
-                 keep_linebreaks: bool = True):
+    def __init__(self,
+                 content: str,
+                 row: int,
+                 column: int,
+                 row_span: int = 1,
+                 col_span: int = 1,
+                 markdown: bool = True,
+                 keep_linebreaks: bool = True
+                 ):
         check_type("content", content, str)
         self.content = content
 
@@ -65,4 +72,4 @@ class TextBox(GridObject):
             md = Markdown()
             text = md.convert(text)
 
-        return f"<div {self._style_str}>{text}</div>"
+        return f"<div {self._style_str} class=\"textbox\">{text}</div>"
