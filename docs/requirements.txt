@@ -43,7 +43,7 @@ nbclassic==0.2.6
 nbclient==0.5.3
 nbconvert==6.0.7
 nbformat==5.1.2
-needful==0.1a1
+needful==0.2a1
 nest-asyncio==1.5.1
 notebook==6.2.0
 numpy==1.19.5
