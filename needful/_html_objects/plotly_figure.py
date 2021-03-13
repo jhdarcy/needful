@@ -44,7 +44,7 @@ class PlotlyFigure(GridObject):
         str
             The Plotly.newPlot(...) function for this plot.
         """
-        plotly_html = self.fig.to_html(include_plotlyjs=False, full_html=False,
+        plotly_html = self.fig.to_html(include_plotlyjs=False, full_html=False, auto_play=False,
                                        default_width='100%', default_height='100%')
 
         # Only keep the Plotly.newPlot(...) part of the HTML string above - it contains everything we need.
