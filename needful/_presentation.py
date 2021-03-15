@@ -4,7 +4,7 @@ from typing import Optional, Union
 from jinja2 import Environment, FileSystemLoader
 import webbrowser
 
-from ._utils import check_exists, check_type
+from ._utils import check_exists, check_type, check_sanity_int
 from ._slide import Slide
 
 
@@ -21,6 +21,14 @@ class Presentation:
     page_numbers : bool, default=True
         Whether to display page numbers on each slide. Defaults to `True`, and can be overridden at an individual slide
         level if needed.
+    width : int, default=1280
+        The base width of this presentation, in pixels. The presentation will be scaled up or down relative to this
+        width. Defaults to 1280px.
+    height : int, default=720
+        The base height of this presentation, in pixels. The presentation will be scaled up or down relative to this
+        height. Defaults to 720px.
+    autoscale : bool, default=True
+        Whether to automatically scale the presentation up/down to fit the window. Defaults to `True`.
     mathjax : bool, default=False
         Whether to load MathJax to display equations. Defaults to `False`.
     """
@@ -28,6 +36,9 @@ class Presentation:
                  title: str,
                  css_file: Optional[Union[str, Path]] = None,
                  page_numbers: bool = True,
+                 width: int = 1280,
+                 height: int = 720,
+                 autoscale: bool = True,
                  mathjax: bool = False
                  ):
 
@@ -52,6 +63,17 @@ class Presentation:
         else:
             self._css_file = Path(css_file)
             check_exists(self._css_file, css_file)
+
+        check_type("width", width, int)
+        check_sanity_int("width", width)
+        self.width = width
+
+        check_type("height", height, int)
+        check_sanity_int("height", height)
+        self.height = height
+
+        check_type("autoscale", autoscale, bool)
+        self.autoscale = autoscale
 
         check_type("page_numbers", page_numbers, bool)
         self.page_numbers = page_numbers
@@ -83,7 +105,7 @@ class Presentation:
         Parameters
         ----------
         slide_list : list
-            Self explanatory.
+            Self-explanatory.
         """
         check_type("slide_list", slide_list, list)
         for slide in slide_list:
@@ -96,7 +118,7 @@ class Presentation:
         ----------
         filename: str or pathlib.Path
             A string or pathlib.Path object representing the HTML file.
-        open_file: optional, bool
+        open_file: bool, default=True
             Whether to open the resulting file (defaults to `True`).
         """
         check_type("filename", filename, Union[str, Path])
@@ -130,10 +152,12 @@ class Presentation:
         # Render the HTML!
         template_vars = {
             "css_style": css,
-            "mathjax": self.mathjax,
-            "plotly": plotly,
             "slides": self.slides,
             "title": self.title,
+            "size": (self.width, self.height),
+            "autoscale": self.autoscale,
+            "mathjax": self.mathjax,
+            "plotly": plotly,
             "css_themes": self._css_themes,
             "page_numbers": self.page_numbers,
             "config_var": "needfulConfig"

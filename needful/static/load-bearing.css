@@ -1,29 +1,21 @@
 {# Contains essential CSS required for proper functioning. Edit at your peril. #}
 
 body {
-    font-size: 100%;
+    font-size: 12px;
 }
 
 /*\ Slide container and content \*/
 
 #slide-container {
-    max-width: 99%;
     position: absolute;
     display: block;
-    width: 99%;
-    height: 99%;
     margin: auto;
 }
 
 #slide-content {
-    position: relative;
-    margin-left: var(--slide-margin-left);
-    margin-right: var(--slide-margin-right);
-    margin-bottom: var(--slide-margin-bottom);
+    margin-left: 40px;
+    margin-right: 40px;
     display: grid;
-    max-height: 90vh;
-    column-gap: 20px;
-    row-gap: 5px;
 }
 
 /*\ Slide number, navigation menu and footer \*/
@@ -33,22 +25,18 @@ footer {
     left: 0;
     bottom: 0;
     display: block;
-    width: 100%;
 }
 
 #nav-menu {
-    padding-left: var(--slide-margin-left);
-    padding-right: var(--slide-margin-right);
-    padding-bottom: var(--slide-margin-bottom);
-    text-align: var(--slide-number-position);
+
 }
 
 #nav-menu-content {
     display: none;
-    position: fixed;
+    position: relative;
     z-index: 100;
-    bottom: 60px;
     padding: 10px;
+    margin: -3px;
 }
 
 #nav-menu-content.right {

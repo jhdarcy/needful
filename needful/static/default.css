@@ -8,8 +8,8 @@ to be defined under :root, are preceded by -- and are case sensitive.*/
 
     --slide-margin-left: 3.5%;
     --slide-margin-right: 3.5%;
-    --slide-margin-top: 1.5%;
-    --slide-margin-bottom: 2.5%;
+    --slide-margin-top: 2.5%;
+    --slide-margin-bottom: 2%;
 
     --slide-title-position: left; /* left, center, or right */
     --slide-number-position: left; /* left, center, or right */
@@ -18,7 +18,14 @@ to be defined under :root, are preceded by -- and are case sensitive.*/
 
 /* Do some font stuff first. */
 
-/* Google font import: 'Inter' by Rasmus Andersson: https://fonts.google.com/specimen/Inter*/
+body {
+    /* Set initial font size to 12px. This doesn't mean all text will be 12px, but means all text will be sized
+     *relative* to this, using the CSS "em" unit. (For example, font-size: 1em = 12px, font-size: 2em = 24px and so
+     on.) Adjust this if you change the overall presentation size and need to update all font sizes. */
+    font-size: 12px;
+}
+
+/* Google font import: 'Inter' by Rasmus Andersson: https://fonts.google.com/specimen/Inter */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* Increase weight of bold text - to this end, update font-weight property of <strong> HTML tag. */
@@ -42,10 +49,16 @@ html, body {
     padding-top: var(--slide-margin-top);
 }
 
+/* Applies to the content for each slide, *except* the title, page number and navigation */
 #slide-content {
-
+    margin-left: var(--slide-margin-left);
+    margin-right: var(--slide-margin-right);
+    column-gap: 20px;
+    row-gap: 5px;
 }
 
+
+/* Controls basic appearance of text added via Slide.add_textbox(...) */
 .textbox {
     font-size: 1.7em;
     line-height: 1.3;
@@ -77,6 +90,13 @@ html, body {
     background-color: rgba(0,0,0,0.3);
 }
 
+footer {
+    padding-left: var(--slide-margin-left);
+    padding-right: var(--slide-margin-right);
+    padding-bottom: var(--slide-margin-bottom);
+    text-align: var(--slide-number-position);
+}
+
 /* The navigation menu that appears when hovering over the page number */
 #nav-menu-content {
     background-color: var(--main-background-color);
@@ -84,6 +104,7 @@ html, body {
     border-width: 1px;
     border-color: #626262;
     border-radius: 2px;
+    font-size: 1.2em;
 }
 
 #fullscreen-link {

@@ -23,42 +23,42 @@
     <meta charset="UTF-8">
     <title>{{title}}</title>
     <style>
-        {{css_style}}
         {% include 'load-bearing.css' %}
+        {{css_style}}
     </style>
 </head>
 
 <body onresize="scaleContent()">
     {# The main div, which will contain the presentation slides, header, slide controls, etc. #}
     <div id="slide-container">
-        <a class="slide-control prev" id="prev-slide-ctrl" onclick="advanceSlides(-1)">&#10094;</a>
         <header>
             <div id="slide-title">{# Slide title here #}</div>
         </header>
+        <a class="slide-control prev" id="prev-slide-ctrl" onclick="advanceSlides(-1)">&#10094;</a>
         <div id="slide-content">
             {# Insert slide content here; to be populated by JS. #}
         </div>
         <a class="slide-control next" id="next-slide-ctrl" onclick="advanceSlides(1)">&#10095;</a>
-    </div>
 
-    <footer>
-        <div id="nav-menu">
-            <span id="slide-number"></span>
-            <div id="nav-menu-content">
-            {# Contains the hidden hover menu for easy slide navigation #}
-            {% for slide in slides %}
-                {% if slide.section_divider %}
-            <a onclick="jumpToSlide('{{slide.id}}')" class="section-divider">{{slide.menu_title}}</a><br>
-                {% else %}
-            <a onclick="jumpToSlide('{{slide.id}}')">{{slide.menu_title}}</a><br>
-                {% endif %}
-            {% endfor %}
-            <br>
-            <span id="fullscreen-link"><a onclick="toggleFullScreen()">Enter/Exit Fullscreen</a></span>
+
+        <footer>
+            <div id="nav-menu">
+                <span id="slide-number"></span>
+                <div id="nav-menu-content">
+                {# Contains the hidden hover menu for easy slide navigation #}
+                {% for slide in slides %}
+                    {% if slide.section_divider %}
+                <a onclick="jumpToSlide('{{slide.id}}')" class="section-divider">{{slide.menu_title}}</a><br>
+                    {% else %}
+                <a onclick="jumpToSlide('{{slide.id}}')">{{slide.menu_title}}</a><br>
+                    {% endif %}
+                {% endfor %}
+                <br>
+                <span id="fullscreen-link"><a onclick="toggleFullScreen()">Enter/Exit Fullscreen</a></span>
+                </div>
             </div>
-        </div>
-    </footer>
-
+        </footer>
+    </div>
 
     <!-- Begin the needful presentation JavaScript -->
     <script type="text/javascript">

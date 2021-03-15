@@ -3,7 +3,10 @@ to make the JS development easier. This file is processed and inserted into the 
 HTML output file, and should not be edited lest needful be broken forever. #}
 
 var {{config_var}} = {
-    "pageNumbers" : {{ page_numbers | lower() }}
+    "pageNumbers" : {{ page_numbers | lower() }},
+    "width" : {{size[0]}},
+    "height" : {{size[1]}},
+    "autoScale" : {{ autoscale | lower() }}
 }
 
 // Define globals first:
@@ -49,7 +52,7 @@ var cssThemes = {
 // and store them.
 var initialCSS = Array.from(document.styleSheets).map( (style) => Array.from(style.cssRules) ).flat();
 
-// Filter for :root, extract variables and their values, store in array under def
+// Filter for :root, extract variables and their values, store in array.
 var cssRootStyle = initialCSS.filter( (sel) => sel.selectorText == ":root" );
 if (cssRootStyle.length > 0){
     cssRootStyle = cssRootStyle[0].style;
@@ -65,68 +68,99 @@ else
 
 // Define functions:
 
-function showSlide(slide) {
+function showSlide(slide, prevSlide) {
     // As implied, display the given slide.
 
-    // Clear existing title, replace with new one.
-    var titleSpan = $("#slide-title");
-    titleSpan.empty();
-    titleSpan.append(slide.title);
+    // Note: was getting nonspecific NS_ERROR_NOT_AVAILABLE on cssThemes.default.forEach... below, which *seem* to
+    // disappear when this function is thrown into jQuery below. This is equivalent to $(document).ready(...).
+    $(function() {
 
-    // Clear existing content.
-    var slideContent = $("#slide-content");
-    slideContent.empty();
+        if (prevSlide != null) {
+            prevSlide.purge();
+        }
 
-    // Update CSS grid layout/number of columns.
-    slideContent.attr("style", slide.layout);
+        // Clear existing title, replace with new one.
+        var titleSpan = $("#slide-title");
+        titleSpan.empty();
+        titleSpan.append(slide.title);
 
-    // Apply default CSS theme before we show anything.
-    cssThemes.default.forEach( ([name, val]) => cssRootStyle.setProperty(name, val) );
+        // Clear existing content.
+        var slideContent = $("#slide-content");
+        slideContent.empty();
 
-    // Apply slide's CSS theme, if one is set.
-    if (slide.theme_id != null & cssThemes.default.length > 0) {
-        cssThemes[slide.theme_id].forEach( ([name, val]) => cssRootStyle.setProperty(name, val) );
-    }
+        // Update CSS grid layout/number of columns.
+        slideContent.attr("style", slide.layout);
 
-    // Shove in new slide's HTML content, call plotting function.
-    slideContent.append(slide.html);
-    slide.plotly();
+        // Apply default CSS theme before we show anything.
+        cssThemes.default.forEach( ([name, val]) => cssRootStyle.setProperty(name, val) );
 
-    // Update slide number.
-    var slideNumber = $("#slide-number");
-    slideNumber.empty();
-    if (slide.pageNumber){
-        slideNumber.append(slideIndex + 1);
-    }
+        // Apply slide's CSS theme, if one is set.
+        if (slide.theme_id != null & cssThemes.default.length > 0) {
+            cssThemes[slide.theme_id].forEach( ([name, val]) => cssRootStyle.setProperty(name, val) );
+        }
 
-    // Typeset any maths that may be present.
-    if (typeof MathJax !== "undefined" & !slide.disable_mathjax) {
-      MathJax.typeset();
-    }
+        // Shove in new slide's HTML content, call plotting function.
+        slideContent.append(slide.html);
+        slide.plotly();
 
-    // Update content scaling if necessary. Note: if there's issues, this call
-    // may be moved to some page ready event.
-    scaleContent();
+        // Update slide number.
+        var slideNumber = $("#slide-number");
+        slideNumber.empty();
+        if (slide.pageNumber){
+            slideNumber.append(slideIndex + 1);
+        }
+
+        // Typeset any maths that may be present.
+        if (typeof MathJax !== "undefined" & !slide.disable_mathjax) {
+          MathJax.typeset();
+        }
+
+        // Update content scaling if necessary. Note: if there's issues, this call
+        // may be moved to some page ready event.
+        scaleContent();
+    });
 }
 
 function scaleContent(){
     // Update content scaling if we need to fit everything to screen.
-    // Get height of the viewport and slide-content div. If the div height exceeds that
-    // of the viewport, scale the height proportionally.
-    var slideContent = $("#slide-content");
-    var windowHeight = $(window).height() - slideContent[0].offsetTop;
-    var contentHeight = slideContent[0].scrollHeight
+    if (!{{config_var}}.autoScale) return;
 
-    if (contentHeight > windowHeight){
-        var scaleY = (windowHeight / contentHeight).toFixed(2);
-        var re = new RegExp("; transform: scale\(.*\); transform-origin: 0 0")
-        var style = slideContent.attr("style");
-        style = style.replace(re, "")
-        var scaleTransform = "; transform: scale(1, " + scaleY + "); transform-origin: 0 0"
-        style += scaleTransform
-        slideContent.attr("style", style);
+    // First, fix size of the slide container.
+    var slideContainer = $("#slide-container");
+    slideContainer.css("width", {{config_var}}.width);
+    slideContainer.css("height", {{config_var}}.height);
+
+    // How much space do we have?
+    var windowHeight = window.innerHeight;
+    var windowWidth = window.innerWidth;
+
+    var widthRatio = windowWidth / {{config_var}}.width;
+    var heightRatio = windowHeight / {{config_var}}.height;
+
+    var left = 0;
+    var top = 0;
+
+    if (widthRatio > heightRatio)
+    {
+        // Window is too wide for scaled height to fit without scrolling, therefore fix the height to windowHeight and
+        // scale the width accordingly.
+        var newWidth = heightRatio * {{config_var}}.width;
+        left = 0.5 * (windowWidth - newWidth);
+        transform = "scale(" + heightRatio + ")";
+    }
+    else
+    {
+        // Window is too tall for scaled width to fit without scrolling, therefore fix the width to windowWidth and
+        // scale height accordingly.
+        var newHeight = widthRatio * {{config_var}}.height;
+        top = 0.5 * (windowHeight - newHeight);
+        transform = "scale(" + widthRatio + ")";
     }
 
+    slideContainer.css("left", left);
+    slideContainer.css("top", top);
+    slideContainer.css("transform", transform);
+    slideContainer.css("transform-origin", "0 0");
 }
 
 function advanceSlides(n){
@@ -135,9 +169,11 @@ function advanceSlides(n){
     // Sanity check:
     if (slideIndex + n < 0 || slideIndex + n > maxIndex) { return }
 
-    // Clear the current slide and display the new one:
-    slideData[slideIndex].purge();
-    showSlide(slideData[slideIndex += n])
+    var prevSlideIndex = slideIndex;
+    slideIndex += n
+
+    // Display the new slide:
+    showSlide(slideData[slideIndex], slideData[prevSlideIndex]);
 
     // Control visibility of slide controls.
     $("#prev-slide-ctrl").show();
@@ -188,7 +224,7 @@ function toggleFullScreen() {
 
 $(document).ready( function() {
     // Show the first slide!
-    showSlide(slideData[0]);
+    showSlide(slideData[0], null);
 
     // Hide previous-slide control as we're on the first page.
     $("#prev-slide-ctrl").hide();
