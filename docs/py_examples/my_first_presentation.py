@@ -1,5 +1,6 @@
 # This two-slide presentation is based on the Gapminder example dataset bundled with Plotly Express.
 # The code for the plots generated here are lifted verbatim from https://plotly.com/python/plotly-express/.
+
 import plotly.express as px
 
 from needful import Presentation, Slide
@@ -9,9 +10,8 @@ df = px.data.gapminder()
 slide_1 = Slide(title="GDP Per Capita & Life Expectancy: 2007", columns=2)
 
 fig_1 = px.scatter(df.query("year==2007"), x="gdpPercap", y="lifeExp", size="pop", color="continent",
-                   hover_name="country", log_x=True, size_max=60, width=800, height=700)
-fig_1.update_layout(legend_orientation='h',
-                    margin=dict(t=30, l=10, r=10))
+                   hover_name="country", log_x=True, size_max=60, width=650, height=600)
+fig_1.update_layout(margin=dict(t=30, l=10, r=10))
 
 slide_1.add_plotly_figure(fig_1, row=1, column=2)
 
@@ -35,9 +35,10 @@ slide_1.add_textbox(content=slide_1_text, row=1, column=1)
 
 slide_2 = Slide("GDP Per Capita & Life Expectancy: 1952–2007", columns=1)
 
+# Generate the plot to be added to Slide #2.
 fig_2 = px.scatter(df, x="gdpPercap", y="lifeExp", animation_frame="year", animation_group="country",
                    size="pop", color="continent", hover_name="country", facet_col="continent",
-                   log_x=True, size_max=45, range_x=[100,100000], range_y=[25,90], height=550)
+                   log_x=True, size_max=45, range_x=[100,100000], range_y=[25,90], height=450)
 
 slide_2.add_plotly_figure(fig_2, row=1, column=1)
 
@@ -48,7 +49,7 @@ slide_2_text = """
 """
 slide_2.add_textbox(slide_2_text, row=2, column=1)
 
-pres = Presentation("My First needful Presentation")
+pres = Presentation("My First Needful Presentation")
 
 pres.add_slides([slide_1, slide_2])
 
