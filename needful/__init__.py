@@ -2,7 +2,7 @@ __version__ = '0.1.0'
 
 from ._presentation import Presentation
 from ._slide import Slide
-from ._css import CSSTheme
+from ._css import CSSTheme, get_default_css
 
 __doc__ = """
 needful - simple, lightweight, interactive HTML presentations and dashboards for data scientists

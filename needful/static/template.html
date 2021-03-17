@@ -20,6 +20,7 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     {% endif %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <title>{{title}}</title>
     <style>
@@ -34,30 +35,38 @@
         <header>
             <div id="slide-title">{# Slide title here #}</div>
         </header>
-        <a class="slide-control prev" id="prev-slide-ctrl" onclick="advanceSlides(-1)">&#10094;</a>
+        <a class="slide-control prev" id="prev-slide-ctrl" onclick="advanceSlides(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </a>
         <div id="slide-content">
             {# Insert slide content here; to be populated by JS. #}
         </div>
-        <a class="slide-control next" id="next-slide-ctrl" onclick="advanceSlides(1)">&#10095;</a>
-
-
         <footer>
             <div id="nav-menu">
-                <span id="slide-number"></span>
-                <div id="nav-menu-content">
-                {# Contains the hidden hover menu for easy slide navigation #}
-                {% for slide in slides %}
-                    {% if slide.section_divider %}
-                <a onclick="jumpToSlide('{{slide.id}}')" class="section-divider">{{slide.menu_title}}</a><br>
-                    {% else %}
-                <a onclick="jumpToSlide('{{slide.id}}')">{{slide.menu_title}}</a><br>
-                    {% endif %}
-                {% endfor %}
-                <br>
-                <span id="fullscreen-link"><a onclick="toggleFullScreen()">Enter/Exit Fullscreen</a></span>
+                <div id="slide-number">
+                    <span id="slide-number-span"></span>
+                    <div id="nav-menu-content">
+                    {# Contains the hidden hover menu for easy slide navigation #}
+                    {% for slide in slides %}
+                        {% if slide.section_divider %}
+                    <a onclick="jumpToSlide('{{slide.id}}')" class="section-divider">{{slide.menu_title}}</a><br>
+                        {% else %}
+                    <a onclick="jumpToSlide('{{slide.id}}')">{{slide.menu_title}}</a><br>
+                        {% endif %}
+                    {% endfor %}
+                    <br>
+                    <span id="fullscreen-link">
+                        <a onclick="toggleFullScreen()">
+                        <i class="fas fa-expand"></i> Enter/Exit Fullscreen
+                        </a>
+                    </span>
+                    </div>
                 </div>
             </div>
         </footer>
+        <a class="slide-control next" id="next-slide-ctrl" onclick="advanceSlides(1)">
+            <i class="fas fa-chevron-right"></i>
+        </a>
     </div>
 
     <!-- Begin the needful presentation JavaScript -->

@@ -1,5 +1,6 @@
 /* Some convenient global styling variables, modify and add to as necessary. Please note that all variable names need
 to be defined under :root, are preceded by -- and are case sensitive.*/
+
 :root{
     --main-background-color: white;
 
@@ -39,6 +40,10 @@ html, body {
     font-weight: 300;
     color: var(--main-font-color);
 }
+
+/* Applies to all elements of slide, including title, page number and left/right controls. Left empty by default,
+but can be modified if required.*/
+#slide-container {}
 
 #slide-title {
     font-size: 4em;
@@ -90,12 +95,6 @@ html, body {
     background-color: rgba(0,0,0,0.3);
 }
 
-footer {
-    padding-left: var(--slide-margin-left);
-    padding-right: var(--slide-margin-right);
-    padding-bottom: var(--slide-margin-bottom);
-    text-align: var(--slide-number-position);
-}
 
 /* The navigation menu that appears when hovering over the page number */
 #nav-menu-content {
@@ -103,13 +102,18 @@ footer {
     border-style: solid;
     border-width: 1px;
     border-color: #626262;
-    border-radius: 2px;
-    font-size: 1.2em;
+    border-radius: 3px;
+    font-size: 0.85em;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+    line-height: 1.25;
 }
 
 #fullscreen-link {
-    font-weight: 500;
-    font-size: 0.9em;
+    font-weight: 400;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    color: grey;
+    letter-spacing: 0.2em;
 }
 
 

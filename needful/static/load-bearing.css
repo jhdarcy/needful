@@ -2,6 +2,7 @@
 
 body {
     font-size: 12px;
+    box-sizing: border-box;
 }
 
 /*\ Slide container and content \*/
@@ -9,7 +10,6 @@ body {
 #slide-container {
     position: absolute;
     display: block;
-    margin: auto;
 }
 
 #slide-content {
@@ -21,26 +21,37 @@ body {
 /*\ Slide number, navigation menu and footer \*/
 
 footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+    position: absolute;
     display: block;
+    bottom: 0;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: -fill-available;
 }
 
 #nav-menu {
+    position: relative;
+}
 
+#slide-number {
+    display: block;
+    padding: 2.5%;
+    text-align: left;
+}
+
+#slide-number-span {
+    cursor: pointer;
+    padding-left: 2%;
+    padding-right: 2%;
 }
 
 #nav-menu-content {
     display: none;
-    position: relative;
+    position: absolute;
     z-index: 100;
     padding: 10px;
-    margin: -3px;
-}
-
-#nav-menu-content.right {
-    right: 20px;
+    text-align: left;
+    bottom: 2em;
 }
 
 #nav-menu-content a:hover {
@@ -48,10 +59,10 @@ footer {
     cursor: pointer;
 }
 
-#slide-number {
-    cursor: pointer;
-    display: inline-block;
-    padding: 10px;
+#slide-title {
+    font-size: 3em;
+    padding-top: 2%;
+    padding-left: 2%;
 }
 
 /*\ Slide controllers - forward and back controls \*/
