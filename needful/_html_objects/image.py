@@ -1,6 +1,7 @@
+from base64 import b64encode
+
 from pathlib import Path
 from typing import Union
-from base64 import b64encode
 
 from PIL import Image as PILImage
 
@@ -13,7 +14,7 @@ class Image(GridObject):
 
     Parameters
     ----------
-    image_path: str or pathlib.Path
+    image_file: str, pathlib.Path or
         A string or pathlib.Path object representing the path to the image.
     row: int
         The grid row in which to place this image.
@@ -39,7 +40,7 @@ class Image(GridObject):
         # Check provided image_path is either string or Path object, then check that it exists.
         check_type("image_path", image_path, Union[str, Path])
         check_exists(image_path, "Image")
-        self.image_path = image_path
+        self.image_file = image_path
 
         self._check_and_set(row, column, row_span, col_span)
 
@@ -54,7 +55,7 @@ class Image(GridObject):
         str
         """
         # Read in the image, convert to string with Base64.
-        with open(self.image_path, 'rb') as f:
+        with open(self.image_file, 'rb') as f:
             img = b64encode(f.read()).decode()
             # Use Pillow to also open the image and get its size - we'll use this to scale the image if we need to.
             img_size = PILImage.open(f).size

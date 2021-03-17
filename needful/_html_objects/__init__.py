@@ -6,6 +6,7 @@ calls the various `Slide.add_textbox(...)`, `Slide.add_plot(...)`, etc. function
 """
 
 from .grid_object import GridObject
+from .image import Image
+from .mpl_figure import MPLFigure
 from .plotly_figure import PlotlyFigure
 from .textbox import TextBox
-from .image import Image

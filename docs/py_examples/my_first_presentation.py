@@ -13,7 +13,7 @@ fig_1 = px.scatter(df.query("year==2007"), x="gdpPercap", y="lifeExp", size="pop
                    hover_name="country", log_x=True, size_max=60, width=650, height=600)
 fig_1.update_layout(margin=dict(t=30, l=10, r=10))
 
-slide_1.add_plotly_figure(fig_1, row=1, column=2)
+slide_1.add_plot(fig_1, row=1, column=2)
 
 avg_life_exp = df.query("year==2007").groupby("continent").lifeExp.mean().round(1)
 
@@ -40,7 +40,7 @@ fig_2 = px.scatter(df, x="gdpPercap", y="lifeExp", animation_frame="year", anima
                    size="pop", color="continent", hover_name="country", facet_col="continent",
                    log_x=True, size_max=45, range_x=[100,100000], range_y=[25,90], height=450)
 
-slide_2.add_plotly_figure(fig_2, row=1, column=1)
+slide_2.add_plot(fig_2, row=1, column=1)
 
 slide_2_text = """
 * The animated plot above displays the change in GDP per capita and life expectancy between 1952–2007.

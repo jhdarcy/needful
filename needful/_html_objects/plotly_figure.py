@@ -1,7 +1,9 @@
-from plotly.graph_objects import Figure as _Figure
-from secrets import token_hex
 from re import compile as compile_regex
 from re import DOTALL
+from secrets import token_hex
+from typing import Optional
+
+from plotly.graph_objects import Figure as _Figure
 
 from .grid_object import GridObject
 from .._utils import check_type
@@ -22,11 +24,21 @@ class PlotlyFigure(GridObject):
         The number of rows for this plot to span (defaults to `1`).
     col_span: optional, int
         The number of columns for this plot to span (defaults to `1`).
+    config: optional, dict
+        A dictionary containing plot configuration options to be passed to Plotly.js.
     """
 
-    def __init__(self, fig: _Figure, row: int, column: int, row_span: int = 1, col_span: int = 1):
+    def __init__(self,
+                 fig: _Figure,
+                 row: int,
+                 column: int,
+                 row_span: int = 1,
+                 col_span: int = 1,
+                 config: Optional[dict] = None
+                 ):
         check_type("fig", fig, _Figure)
         self.fig = fig
+        self.config = config
 
         self._check_and_set(row, column, row_span, col_span)
 
