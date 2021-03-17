@@ -9,6 +9,7 @@ from plotly.graph_objects import Figure
 # From this module
 from ._css import CSSTheme
 from ._html_objects import TextBox, Image, PlotlyFigure
+from ._preview import preview_slide
 from ._utils import check_type
 
 
@@ -232,11 +233,11 @@ class Slide:
             The grid row in which to place this image.
         column: int
             The grid column in which to place this image.
-        row_span: optional, int
+        row_span: int, default=1
             The number of rows for this image to span (defaults to `1`).
-        col_span: optional, int
+        col_span: int, default=1
             The number of columns for this image to span (defaults to `1`).
-        width_pct: optional, int
+        width_pct: int, default=100
             The percentage of the original image width to scale by. Defaults to 100 (no resizing).
         """
 
@@ -244,4 +245,19 @@ class Slide:
         self._check_grid_pos(row, column)
         self._elements.append(image)
 
-    # TODO: preview() function
+    def preview(self, css_file: Optional[Union[str, Path]] = None):
+        """Creates and opens a preview of the slide.
+
+        Parameters
+        ----------
+        css_file : str, Path, optional
+            The .css file controlling the overall styling of this presentation. If left blank, the presentation will use
+            the default needful style.
+        """
+        check_type("css_file", css_file, Optional[Union[str, Path]])
+
+        # Nothing else to do except pass self to preview_slide(...) function.
+        preview_slide(self, css_file)
+
+
+
