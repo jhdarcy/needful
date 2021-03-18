@@ -21,10 +21,10 @@ var slideData = [
         "html" : `{{ slide.html | replace("\\", "\\\\") }}`,
         "layout" : "grid-template-columns: repeat({{slide.n_cols}}, 1fr)",
         "plotly" : function plot() {
-            {{slide.plotly_func}}
+            {{slide.plotly_plot_func}}
         },
         "purge" : function purge() {
-            {{slide.purge_func}}
+            {{slide.plotly_purge_func}}
         },
         "pageNumber" : {{ config_var + ".pageNumbers" if slide._page_number == None else slide._page_number | lower() }},
         "navMenu" : {{ config_var + ".navMenu" if slide._nav_menu == None else slide._nav_menu | lower() }},

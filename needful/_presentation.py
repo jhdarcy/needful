@@ -148,10 +148,7 @@ class Presentation:
         env = Environment(loader=FileSystemLoader(str(self._static_dir)), trim_blocks=True, lstrip_blocks=True)
         template = env.get_template(self._html_template.name)
 
-        # Total number of Plotly plots in this presentation, use this to determine whether
-        # the presentation should load Plotly.
-        n_plots = sum([slide.n_plots for slide in self.slides])
-        plotly = n_plots > 0
+        needs_plotly = any([slide.needs_plotly for slide in self.slides])
 
         # Read in the CSS stylesheet to insert into the HTML document.
         with open(self._css_file, 'r') as f:
@@ -175,7 +172,7 @@ class Presentation:
             autoscale=self.autoscale,
             overflow=self.overflow,
             mathjax=self.mathjax,
-            plotly=plotly,
+            plotly=needs_plotly,
             css_themes=self._css_themes,
             page_numbers=self.page_numbers,
             nav_menu=self.nav_menu,
