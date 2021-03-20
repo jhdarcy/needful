@@ -1,7 +1,7 @@
 from base64 import b64encode
 
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 
 from PIL import Image as PILImage
 
@@ -26,6 +26,8 @@ class Image(GridObject):
         The number of columns for this image to span (defaults to `1`).
     width_pct: optional, int
         The percentage of the original image width to scale by. Defaults to 100 (no resizing).
+    css_class: str, optional
+        The name of the CSS class (or classes) to apply to this object.
     """
 
     def __init__(self,
@@ -34,7 +36,8 @@ class Image(GridObject):
                  column: int,
                  row_span: int = 1,
                  col_span: int = 1,
-                 width_pct: int = 100
+                 width_pct: int = 100,
+                 css_class: Optional[str] = None
                  ):
 
         # Check provided image_path is either string or Path object, then check that it exists.
@@ -42,7 +45,7 @@ class Image(GridObject):
         check_exists(image_path, "Image")
         self.image_file = image_path
 
-        self._check_and_set(row, column, row_span, col_span)
+        self._check_and_set(row, column, row_span, col_span, css_class)
 
         check_sanity_int("width_pct", width_pct)
         self.width_pct = width_pct

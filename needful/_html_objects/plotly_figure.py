@@ -24,6 +24,8 @@ class PlotlyFigure(GridObject):
         The number of rows for this plot to span (defaults to `1`).
     col_span: optional, int
         The number of columns for this plot to span (defaults to `1`).
+    css_class: str, optional
+        The name of the CSS class (or classes) to apply to this object.
     config: optional, dict
         A dictionary containing plot configuration options to be passed to Plotly.js.
     """
@@ -34,18 +36,19 @@ class PlotlyFigure(GridObject):
                  column: int,
                  row_span: int = 1,
                  col_span: int = 1,
+                 css_class: Optional[str] = None,
                  config: Optional[dict] = None
                  ):
         check_type("fig", fig, _Figure)
         self.fig = fig
         self.config = config
 
-        self._check_and_set(row, column, row_span, col_span)
+        self._check_and_set(row, column, row_span, col_span, css_class)
 
         # Generate a better ID for this figure - we'll use this later.
         self.fig_id = token_hex(5)
 
-    def get_js(self) -> str:
+    def get_plot_js(self) -> str:
         """Get the Javascript Plotly.newPlot(...) function for this plot. The Figure object is converted to its full
         HTML presentation via the fig.to_html(...) function, from which the relevant Javascript is extracted.
 
@@ -72,6 +75,10 @@ class PlotlyFigure(GridObject):
         # Replace the generated div id with the shorter figure ID.
         plotly_js_str = plotly_str.replace(orig_id, self.fig_id)
         return plotly_js_str
+
+    def get_purge_js(self) -> str:
+        """Returns the JS to remove/purge this plot from the screen."""
+        return f'Plotly.purge("{self.fig_id}");'
 
     def get_div(self) -> str:
         """Get the required <div></div> HTML tags to display this plot.

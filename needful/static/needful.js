@@ -20,11 +20,11 @@ var slideData = [
         "theme_id" : {{ "null" if slide.theme == None else '"' + slide.theme.id + '"'}},
         "html" : `{{ slide.html | replace("\\", "\\\\") }}`,
         "layout" : "grid-template-columns: repeat({{slide.n_cols}}, 1fr)",
-        "plotly" : function plot() {
-            {{slide.plotly_plot_func}}
+        "plot" : function plot() {
+            {{slide.js_plot_func}}
         },
         "purge" : function purge() {
-            {{slide.plotly_purge_func}}
+            {{slide.js_purge_func}}
         },
         "pageNumber" : {{ config_var + ".pageNumbers" if slide._page_number == None else slide._page_number | lower() }},
         "navMenu" : {{ config_var + ".navMenu" if slide._nav_menu == None else slide._nav_menu | lower() }},
@@ -98,7 +98,7 @@ function showSlide(slide) {
 
     // Shove in new slide's HTML content, call plotting function.
     slideContent.append(slide.html);
-    slide.plotly();
+    slide.plot();
 
     // Update slide number.
     var slideNumber = $("#slide-number-span");
@@ -147,6 +147,7 @@ function scaleContent(){
     var widthRatio = windowWidth / {{config_var}}.width;
     var heightRatio = windowHeight / {{config_var}}.height;
 
+    var scaleFactor = 0
     var left = 0;
     var top = 0;
 
@@ -156,7 +157,7 @@ function scaleContent(){
         // scale the width accordingly.
         var newWidth = heightRatio * {{config_var}}.width;
         left = 0.5 * (windowWidth - newWidth);
-        transform = "scale(" + heightRatio + ")";
+        scaleFactor = heightRatio;
     }
     else
     {
@@ -164,13 +165,31 @@ function scaleContent(){
         // scale height accordingly.
         var newHeight = widthRatio * {{config_var}}.height;
         top = 0.5 * (windowHeight - newHeight);
-        transform = "scale(" + widthRatio + ")";
+        scaleFactor = widthRatio;
     }
 
-    slideContainer.css("left", left);
-    slideContainer.css("top", top);
-    slideContainer.css("transform", transform);
-    slideContainer.css("transform-origin", "0 0");
+    transform = "scale(" + scaleFactor + ")";
+
+    //
+    if (typeof Bokeh !== "undefined"){
+        $.each(Bokeh.index, function (key, fig){
+            // console.log(scaleFactor);
+
+            // fig.model.plot_width and .plot_height contain original width and height, while
+            // fig.layout.sizing.width and .height can be modified prior to calling resize_layout().
+            fig.layout.sizing.width = fig.model.plot_width * scaleFactor;
+            fig.layout.sizing.height = fig.model.plot_height * scaleFactor;
+            fig.resize_layout();
+
+            // The Bokeh figure will now be too big (or small), scale it back to its normal size.
+            var invTransform = "scale(" + 1/scaleFactor + ")";
+            fig.el.style.transform = invTransform;
+            fig.el.style.transformOrigin = "0 0";
+        });
+    }
+
+    slideContainer.css({"left": left, "top": top});
+    slideContainer.css({"transform": transform, "transform-origin": "0 0"});
 }
 
 function advanceSlides(n){

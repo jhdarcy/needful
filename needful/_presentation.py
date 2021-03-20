@@ -148,7 +148,16 @@ class Presentation:
         env = Environment(loader=FileSystemLoader(str(self._static_dir)), trim_blocks=True, lstrip_blocks=True)
         template = env.get_template(self._html_template.name)
 
+        needs_bokeh = any([slide.needs_bokeh for slide in self.slides])
+        if needs_bokeh:
+            # Get the Bokeh.js CDN details.
+            from bokeh.resources import CDN
+            bokeh_cdn = CDN.render()
+        else:
+            bokeh_cdn = ""
+
         needs_plotly = any([slide.needs_plotly for slide in self.slides])
+
 
         # Read in the CSS stylesheet to insert into the HTML document.
         with open(self._css_file, 'r') as f:
@@ -173,6 +182,7 @@ class Presentation:
             overflow=self.overflow,
             mathjax=self.mathjax,
             plotly=needs_plotly,
+            bokeh=bokeh_cdn,
             css_themes=self._css_themes,
             page_numbers=self.page_numbers,
             nav_menu=self.nav_menu,

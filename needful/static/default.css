@@ -35,7 +35,7 @@ strong {
 }
 
 html, body {
-    background: var(--main-background-color);
+    background: grey;
     font-family: var(--main-font-family);
     font-weight: 300;
     color: var(--main-font-color);
@@ -43,7 +43,7 @@ html, body {
 
 /* Applies to all elements of slide, including title, page number and left/right controls. Left empty by default,
 but can be modified if required.*/
-#slide-container {}
+#slide-container {background: var(--main-background-color);}
 
 #slide-title {
     font-size: 4em;

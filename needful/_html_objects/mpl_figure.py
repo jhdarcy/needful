@@ -24,8 +24,10 @@ class MPLFigure(GridObject):
         The number of rows for this image to span (defaults to `1`).
     col_span: optional, int
         The number of columns for this image to span (defaults to `1`).
-    width_pct: optional, int
-        The percentage of the original image width to scale by. Defaults to 100 (no resizing).
+    css_class: str, optional
+        The name of the CSS class (or classes) to apply to this object.
+    config: dict, optional
+        An optional dictionary containing arguments to pass to the Matplotlib `savefig` function.
     """
     def __init__(self,
                  fig: _Figure,
@@ -33,6 +35,7 @@ class MPLFigure(GridObject):
                  column: int,
                  row_span: int = 1,
                  col_span: int = 1,
+                 css_class: Optional[str] = None,
                  config: Optional[dict] = None
                  ):
 
@@ -57,7 +60,7 @@ class MPLFigure(GridObject):
             self.fig_out = BytesIO()
 
         self.fig.savefig(self.fig_out, **self.config)
-        self._check_and_set(row, column, row_span, col_span)
+        self._check_and_set(row, column, row_span, col_span, css_class)
 
     def get_div(self) -> str:
         """Get the required <div></div> HTML tags to display this plot.
