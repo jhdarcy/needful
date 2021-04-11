@@ -6,6 +6,7 @@ from typing import Optional, Union
 from PIL import Image as PILImage
 
 from .grid_object import GridObject
+from .mixin import SlideMixin
 from .._utils import check_exists, check_type, check_sanity_int
 
 
@@ -70,5 +71,38 @@ class Image(GridObject):
         return html_str
 
 
+class ImageMixin(SlideMixin):
+    """Adds Image functionality to the Slide class."""
+    def add_image(self,
+                  image_path: Union[str, Path],
+                  row: int,
+                  column: int,
+                  row_span: int = 1,
+                  col_span: int = 1,
+                  width_pct: int = 100,
+                  css_class: Optional[str] = None,
+                  ):
+        """Add an image to this slide, in the specified row and column.
 
+        Parameters
+        ----------
+        image_path: str or pathlib.Path
+            A string or pathlib.Path object representing the path to the image.
+        row: int
+            The grid row in which to place this image.
+        column: int
+            The grid column in which to place this image.
+        row_span: int, default=1
+            The number of rows for this image to span (defaults to `1`).
+        col_span: int, default=1
+            The number of columns for this image to span (defaults to `1`).
+        width_pct: int, default=100
+            The percentage of the original image width to scale by. Defaults to 100 (no resizing).
+        css_class : str, optional
+            The CSS class (or classes) to apply to this image. Multiple CSS classes are applied in a single string,
+            separated by a space. I.e. `css_class = "class1 class2"`.
+        """
 
+        image = Image(image_path, row, column, row_span, col_span, width_pct, css_class)
+        self._check_grid_pos(row, column)
+        self._elements.append(image)
