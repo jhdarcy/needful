@@ -158,19 +158,9 @@ class Presentation:
 
         needs_plotly = any([slide.needs_plotly for slide in self.slides])
 
-
         # Read in the CSS stylesheet to insert into the HTML document.
         with open(self._css_file, 'r') as f:
             css = "".join(f.readlines())
-
-        # Extract the :root CSS variables, if present.
-        # css_root_str = re.search(r":root\s*{.*?}", css, flags=re.MULTILINE | re.DOTALL)
-        #
-        # if css_root_str:
-        #     # :root { ... } match found
-        #     css_root_str = css_root_str[0]
-
-        # TODO: some trickery to warn if a CSS variable is defined in a theme, but not the main CSS stylesheet.
 
         # Render the HTML!
         template_vars = dict(

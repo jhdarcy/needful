@@ -6,13 +6,23 @@
 needful
 =======
 
-needful is a Python library for generating HTML presentations and dashboards. The resulting HTML file is entirely
+*needful* is a Python library for generating HTML presentations and dashboards. The resulting HTML file is entirely
 self-contained, and can be easily shared or hosted online.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   installation
+   basics/index
+   styling/index
+   tutorials/index
+   issues/index
 
 Overview
 ========
 
-Creating a fully fledged needful presentation is very straightforward:
+Creating a fully fledged *needful* presentation is very straightforward:
 
 .. literalinclude:: py_examples/my_first_presentation.py
    :language: python
@@ -30,9 +40,6 @@ text formatting, and seamless embedding of `Plotly <https://plotly.com/python/>`
 
 For some more substantial demonstrations of Needful's capabilities, see the Examples section.
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
 
 
 * :ref:`genindex`

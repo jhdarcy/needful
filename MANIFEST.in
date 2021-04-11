@@ -1,1 +1,1 @@
-include ./needful/static/
+include needful/static/*

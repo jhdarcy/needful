@@ -70,7 +70,11 @@ class TextBox(GridObject):
             text = self.content
 
         if self.markdown:
-            md = Markdown()
+            extensions = ["tables", "fenced_code"]
+            md = Markdown(extensions=extensions)
             text = md.convert(text)
+
+        # If there are any backticks (`) present in the text, convert it to its HTML entity (&#96;).
+        text = text.replace("`", "&#96;")
 
         return f"<div {self._style_str}>{text}</div>"
